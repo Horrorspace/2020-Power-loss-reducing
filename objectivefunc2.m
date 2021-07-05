@@ -1,0 +1,36 @@
+function f = objectivefunc2(v)
+i = sqrt(-1);
+x = v(1);
+y = v(2);
+z = v(3);
+Pn11 = 40 - x;
+Pn22 = 20 - y;
+Pn1 = 30 - z;
+Pn2 = 15;
+kr = 0.75;
+Zl11 = 1.213 + 4.988*i;
+Zl21 = 2.97 + 6.3*i;
+Zl12 = 2.662 + 8.91*i;
+Zl22 = 8.715 + 14.945*i;
+Rt = 0.8;
+RL11 = real(Zl11);
+RL12 = real(Zl12);
+RL21 = real(Zl21);
+RL22 = real(Zl22);
+Pl11 = abs(((Pn11)*(conj(Zl12) + conj(Zl22) + conj(Zl21)) + (Pn22)*conj(Zl21) + (Pn1 + Pn2)*(conj(Zl22) + conj(Zl21)))/(conj(Zl11)+ conj(Zl12) + conj(Zl22) + conj(Zl21)));
+Pl12 = Pl11 - Pn11;
+Pl22 = Pn1 + Pn2 - Pl12;
+Pl21 = Pl22 + Pn22;
+dP1 = (Pl12^2 + (Pl12*kr)^2)*RL12/110^2;
+dP2 = (Pl22^2 + (Pl22*kr)^2)*RL22/110^2;
+dPt = (((Pn1 + Pn2)/2)^2 + (((Pn1 + Pn2)/2)*kr)^2)*Rt/110^2;
+dP11 = (Pl11^2 + (Pl11*kr)^2)*RL11/110^2;
+dP22 = (Pl21^2 + (Pl21*kr)^2)*RL21/110^2;
+dPII = dP1 + dPt + dP2 + dP11 + dP22;
+B = 480*(x + y + z);
+Ct = 5.274;
+Cee = 2500;
+if x + y + z > 20; % штрафная функция
+   dPII = 200; 
+end
+f = dPII;
